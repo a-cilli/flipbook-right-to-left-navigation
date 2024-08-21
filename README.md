@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flipbook Viewer with Right-to-Left Navigation
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This project implements a flipbook viewer with right-to-left navigation using the iPaperJsApi. It retrieves the total pages, current spread, and spread details of a flipbook embedded in an iframe and displays the page information in reverse order (right to left). 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Funtions and Variables
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### `useEffect`
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The `useEffect` hook in this component is responsible for initializing the flipbook and setting up the page tracking when the component is first rendered. Here's how it works:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Initialization**: The `initializeFlipbook` function is defined within the `useEffect` to set up the iPaperJsApi instance. It finds the flipbook iframe using `document.getElementById("Flipbook")` and initializes it with the `iPaperJsApi`.
 
-## Learn More
+- **Page State Setup**: The `initializeFlipbook` function also retrieves the initial state of the flipbook using `FlipbookInstance.paging.getState`. This function provides details like `totalPages`, `currentSpread`, and `spreads`, which are used to update the `pagesObject` state.
 
-To learn more about Next.js, take a look at the following resources:
+- **Page Change Handling**: The `FlipbookInstance.paging.onChange` function is set up to listen for page changes as the user navigates through the flipbook. When a page change occurs, it updates the `currentSpread` in the `pagesObject` state, ensuring that the displayed page number is accurate.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Fade-In Effect**: The `showFlipbook` function is called after initializing the flipbook, triggering a fade-in effect by setting `hasLoaded` to `true` after a 750ms delay.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### `RToLFormatedPageNumber`
 
-## Deploy on Vercel
+`RToLFormatedPageNumber` is a variable that formats the page number to display it in a right-to-left format, which is typical for content that reads from right to left.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Single Page Display**: If the `currentSpread` is `[0]`, which indicates no pages are being displayed, `RToLFormatedPageNumber` is set to an empty string.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Page Number Formatting**: For all other cases, it maps over the `currentSpread` array, converting each page number into its right-to-left equivalent. This is done by subtracting each page number from `totalPages` and then joining them with a `/` separator to create a string like "12/11" for a two-page spread.
+
+#### Page Display in Custom Element
+
+The page number is displayed in a custom element before the iframe containing the flipbook:
+
+- **Page Display Container**: A `<div>` is used to create a header-like section at the top of the viewer. This section contains the page number information.
+
+- **Page Number Element**: Inside this container, the text is places to represent the currect pages being displayed. The `RToLFormatedPageNumber` and `totalPages` are displayed here and divided by a hyphen.
+
+- **Dynamic Updates**: As the user navigates through the flipbook, the `useEffect` and `onChange` listener ensure that the `RToLFormatedPageNumber` is updated dynamically, reflecting the correct current page(s) in the custom display element.
+
+This setup allows the page number to be prominently displayed and continuously updated as the user interacts with the flipbook.

@@ -9,7 +9,7 @@ export default function Home() {
     currentSpread: [0],
     endsWithSpread:false,
     spreads:null,
-  });
+  })
 
   const [hasLoaded, sethasLoaded] = useState(false)
   const baseURL = "https://viewer.ipaper.io/demo-flipbooks/right-to-left-navigation/home-kitchen/";

@@ -30,7 +30,7 @@ export default function Home() {
             spreads: result.spreads,
             endsWithSpread: result.spreads[result.spreads.length - 1].length === 1
           });
-        });
+        })
 
 
         FlipbookInstance.paging.onChange((result) => {

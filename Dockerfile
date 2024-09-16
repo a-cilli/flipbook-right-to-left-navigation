@@ -1,9 +1,3 @@
-# Accept the build argument
-ARG CAPROVER_GIT_COMMIT_SHA
-
-# Set it as an environment variable in the container
-ENV GIT_COMMIT_SHA=${CAPROVER_GIT_COMMIT_SHA}
-
 # Use the official Node.js image (slim version for smaller size)
 FROM node:18-alpine
 

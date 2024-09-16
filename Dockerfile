@@ -1,3 +1,9 @@
+# Accept the build argument
+ARG CAPROVER_GIT_COMMIT_SHA
+
+# Set it as an environment variable in the container
+ENV GIT_COMMIT_SHA=${CAPROVER_GIT_COMMIT_SHA}
+
 # Use the official Node.js image (slim version for smaller size)
 FROM node:18-alpine
 
@@ -17,7 +23,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port that the app will run on (default Next.js is 3000)
-EXPOSE 80
+EXPOSE 3000
 
 # Start the Next.js app
 CMD ["npm", "run", "build"]
